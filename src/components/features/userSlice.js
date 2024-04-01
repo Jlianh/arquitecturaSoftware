@@ -70,8 +70,7 @@ export const userSlice = createApi({
                 url: '/auth/login',
                 method: 'POST',
                 body: body
-            }),
-            invalidatesTags: ['Users']
+            })
         })
     })
 })

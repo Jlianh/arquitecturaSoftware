@@ -22,6 +22,7 @@ export default function Login() {
                 password: e.target.password.value
             }
             const response = await login(user)
+            console.log(response);
             if (response.data.status == "error") {
                 setError(true)
             } else {

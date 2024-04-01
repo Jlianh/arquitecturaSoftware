@@ -11,7 +11,7 @@ const store = configureStore({
         [userSlice.reducerPath]: userSlice.reducer,
         [houseSlice.reducerPath]: houseSlice.reducer
     },
-    middleware: (getDefaultMiddleware) => getDefaultMiddleware().concat(userSlice.middleware),
+    middleware: (getDefaultMiddleware) => getDefaultMiddleware().concat(userSlice.middleware).concat(houseSlice.middleware),
 })
 
 export default store
