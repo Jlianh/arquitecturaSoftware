@@ -1,8 +1,7 @@
-import { useState } from 'react'
+
 import '../App.css'
 
 function Profile({user}) {
-
   return (
     <>
       <h1>{user.name}</h1>
@@ -19,8 +18,6 @@ function Profile({user}) {
 }
 
 function Example() {
-
-  const [count, setCount] = useState(0);
 
   const users = [{
     name: "Elvis Presley",
@@ -43,12 +40,9 @@ function Example() {
   return (
     <>
       {users.map((user)=>(
-        <Profile user={user}/>
+        <Profile key={user} user={user}/>
       ))}
       <br />
-      <button onClick={() => setCount(count+1)}>Sumar</button>
-      <button onClick={() => setCount(count-1)}>Restar</button>
-      <p>Contador : {count}</p>
     </>
   )
 }

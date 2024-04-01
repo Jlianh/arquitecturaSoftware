@@ -1,20 +1,19 @@
 import { Link } from 'react-router-dom';
-import { useDeleteUserMutation, useGetUsersQuery } from '../features/userSlice';
+import { useGetHousesQuery, useDeleteHouseMutation } from '../features/houseSlice';
 
 import Swal from 'sweetalert2'
 
-export default function UserList() {
+export default function HouseList() {
 
-  const { data, isError, isLoading } = useGetUsersQuery();
-  console.log({ data, isError, isLoading });
+  const { data, isError, isLoading } = useGetHousesQuery();
 
-  const [deleteUser] = useDeleteUserMutation()
+  const [deleteHouse] = useDeleteHouseMutation()
 
-  const handleDeleteUser = (id) => {
+  const handleDeleteHouse = (id) => {
     if (id) {
       Swal.fire({
         title: "Estas seguro?",
-        text: "No vas a recuperar este usuario",
+        text: "No vas a recuperar esta casa",
         icon: "warning",
         showCancelButton: true,
         confirmButtonColor: "#3085d6",
@@ -24,11 +23,11 @@ export default function UserList() {
       }).then((result) => {
         if (result.isConfirmed) {
           Swal.fire({
-            title: "Deleted!",
-            text: "Your file has been deleted.",
+            title: "Eliminado",
+            text: "La casa fue eliminada con exito",
             icon: "success"
           });
-          deleteUser(id)
+          deleteHouse(id)
         }
       });
     }
@@ -47,32 +46,45 @@ export default function UserList() {
       <table className="border-separate border-spacing-2 border border-slate-500 w-11/12 align-self: center">
         <thead>
           <tr>
-            <th className="border border-slate-600">Identification</th>
-            <th className="border border-slate-600">Name</th>
-            <th className="border border-slate-600">Last Name</th>
-            <th className="border border-slate-600">Email</th>
-            <th className="border border-slate-600">Avatar</th>
-            <th className="border border-slate-600">Actions</th>
+            <th className="border border-slate-600">Code</th>
+            <th className="border border-slate-600">Address</th>
+            <th className="border border-slate-600">City</th>
+            <th className="border border-slate-600">State</th>
+            <th className="border border-slate-600">Size</th>
+            <th className="border border-slate-600">Type</th>
+            <th className="border border-slate-600">Zip Code</th>
+            <th className="border border-slate-600">Rooms</th>
+            <th className="border border-slate-600">Bathrooms</th>
+            <th className="border border-slate-600">Parking</th>
+            <th className="border border-slate-600">Price</th>
+            <th className="border border-slate-600">Image</th>
           </tr>
         </thead>
         <tbody>
-          {data?.map((user) => (
-            <tr key={user._id}>
-              <td className="border border-slate-700" key={user.identification}>{user.identification}</td>
-              <td className="border border-slate-700" key={user.name}>{user.name}</td>
-              <td className="border border-slate-700" key={user.lastname}>{user.lastname}</td>
-              <td className="border border-slate-700" key={user.email}>{user.email}</td>
+          {data?.map((house) => (
+            <tr key={house._id}>
+              <td className="border border-slate-700" key={house.code}>{house.code}</td>
+              <td className="border border-slate-700" key={house.address}>{house.address}</td>
+              <td className="border border-slate-700" key={house.city}>{house.city}</td>
+              <td className="border border-slate-700" key={house.state}>{house.state}</td>
+              <td className="border border-slate-700" key={house.size}>{house.size}</td>
+              <td className="border border-slate-700" key={house.type}>{house.type}</td>
+              <td className="border border-slate-700" key={house.zipCode}>{house.zipCode}</td>
+              <td className="border border-slate-700" key={house.rooms}>{house.rooms}</td>
+              <td className="border border-slate-700" key={house.bathrooms}>{house.bathrooms}</td>
+              <td className="border border-slate-700" key={house.parking}>{house.parking}</td>
+              <td className="border border-slate-700" key={house.price}>{house.price}</td>
               <td className="border-y-2 px-4 py-2 border-indigo-600">
                 <img className="size-40 transition-transform duration-1000 transform hover:scale-110 max-w-none"
-                  src={`http://localhost:3000/${user.avatar}`} /></td>
+                  src={`http://localhost:3000/${house.photo}`} /></td>
               <td className="border border-slate-700">
                 <div className="inline-flex rounded-md shadow-sm" role="group">
-                  <Link to={`/user/${user._id}`}
+                  <Link to={`/user/${house._id}`}
                     className="px-4 py-2 text-sm font-medium text-gray-900 bg-transparent border
                   border-gray-900 rounded-s-lg hover:bg-slate-400 hover:text-black
                   focus:z-10 focus:ring-2 focus:ring-gray-500 focus:bg-gray-900 focus:text-white dark:border-white
                                              dark:text-white dark:hover:text-white dark:hover:bg-gray-700 dark:focus:bg-gray-700">Edit</Link>
-                  <button type="button" onClick={() => handleDeleteUser(user._id)} className="px-4 py-2 text-sm font-medium text-gray-900 bg-transparent border-t border-b border-gray-900 hover:bg-gray-900 hover:text-white focus:z-10 focus:ring-2 focus:ring-gray-500 focus:bg-gray-900 focus:text-white dark:border-white dark:text-white dark:hover:text-white dark:hover:bg-gray-700 dark:focus:bg-gray-700">
+                  <button type="button" onClick={() => handleDeleteHouse(house._id)} className="px-4 py-2 text-sm font-medium text-gray-900 bg-transparent border-t border-b border-gray-900 hover:bg-gray-900 hover:text-white focus:z-10 focus:ring-2 focus:ring-gray-500 focus:bg-gray-900 focus:text-white dark:border-white dark:text-white dark:hover:text-white dark:hover:bg-gray-700 dark:focus:bg-gray-700">
                     Delete
                   </button>
                 </div>
