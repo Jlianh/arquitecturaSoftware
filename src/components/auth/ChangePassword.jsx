@@ -1,12 +1,13 @@
+import { useState } from "react";
+import { useLoginMutation, useUpdateUserMutation } from "../../features/api/apiSlice";
 import { useSelector } from "react-redux";
 import Swal from 'sweetalert2'
-import { useLoginMutation, useEditUserMutation } from "../features/userSlice";
 
-export default function ChangePassword() {
+export default function ChangePassword(){
 
-    const [newPassword, setNewPassword] = useState("");
-    const [notEqualPassword, setNotEqualPassword] = useState(false);
-    const [isError, setIsError] = useState(false);
+    const [newPassword, setNewPassword] = useState("")
+    const [notEqualPassword, setNotEqualPassword] = useState(false)
+    const [isError, setIsError] = useState(false)
 
     const handleChangeNewPassword = (e) => {
         setNewPassword(e.target.value)
@@ -18,11 +19,11 @@ export default function ChangePassword() {
 
     const user = useSelector((state) => state.auth.user);
     const [login] = useLoginMutation();
-    const [updateUser] = useEditUserMutation();
+    const [updateUser] = useUpdateUserMutation()
 
     const handleSubmit = async (e) => {
-        e.preventDefault();
-        setError(false);
+        e.preventDefault();     
+        setIsError(false)
         const userValidate = {
             email: user.email,
             password: e.target.password.value,
@@ -30,14 +31,13 @@ export default function ChangePassword() {
         const response = await login(userValidate)
         if(response.error && response.error.data.status == "error"){
             setIsError(true)
-        } else {
+        }else{
             if(!notEqualPassword){
                 const newUser = {
                     _id: user._id,
                     password: e.target["new-password"].value
                 }
-                console.log(newUser)
-                const response = await updateUser(newUser);
+                const response = await updateUser(newUser)
                 if(response.data.status == "error"){
                     Swal.fire({
                         position: "top-end",
@@ -56,7 +56,7 @@ export default function ChangePassword() {
                     })
                 }
             }
-        }
+        }        
     }
 
     return (
