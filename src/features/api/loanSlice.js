@@ -14,7 +14,7 @@ export const loanSlice = createApi({
             : (a.name[0].toUpperCase() > b.name[0].toUpperCase())  ? 1 : 0)
         }),
         getLoanById: builder.query({
-            query: (_id) => '/Loans/' + _id,
+            query: (id) => '/Loans/' + id,
             providesTags: ['Loan']
         }),
         createLoan: builder.mutation({
