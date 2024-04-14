@@ -1,24 +1,23 @@
 import { configureStore } from '@reduxjs/toolkit';
-import numberReducer from './features/numberSlice';
-import usersReducer from './features/userSlice';
-import authReducer from './features/authSlice';
-import { apiSlice } from './features/api/apiSlice';
-import { apiHousesSlice } from './features/api/apiHousesSlice';
-import { messageSlice } from './features/api/apiMessageSlice';
+import { bookSlice } from './features/api/bookSlice';
+import { loanSlice } from './features/api/loanSlice';
+import { studentsSlice } from './features/api/studentSlice';
+
 
 /** Agrupamos los estados en una sola ubicacion */
 
 const store = configureStore({
     reducer: {
-        [apiSlice.reducerPath]: apiSlice.reducer,
-        [apiHousesSlice.reducerPath]: apiHousesSlice.reducer,
-        [messageSlice.reducerPath]: messageSlice.reducer,
-        number: numberReducer,
-        users: usersReducer,
-        auth: authReducer,
+        [studentsSlice.reducerPath]: studentsSlice.reducer,
+        [bookSlice.reducerPath]: bookSlice.reducer,
+        [loanSlice.reducerPath]: loanSlice.reducer,
     },
     middleware: (getDefaultMiddleware) =>
-    getDefaultMiddleware().concat(apiSlice.middleware).concat(apiHousesSlice.middleware).concat(messageSlice.middleware),
+    getDefaultMiddleware()
+    .concat(studentsSlice.middleware)
+    .concat(bookSlice.middleware)
+    .concat(loanSlice.middleware)
+    
 })
 
 export default store;

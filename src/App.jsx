@@ -1,51 +1,41 @@
 import { BrowserRouter, Routes, Route } from "react-router-dom";
 import "./App.css";
-import Example from "./components/example";
 import Footer from "./components/footer";
 import Header from "./components/header";
-import UserList from "./components/user/UserList";
-import Login from "./components/auth/Login";
-import UserFormCreate from "./components/user/UserFormCreate";
-import UserFormEdit from "./components/user/UserFormEdit";
-import { useDispatch } from 'react-redux'
-import { useEffect } from "react";
-import { loginSuccess } from "./features/authSlice";
-import PrivateRoute from "./components/PrivateRoute";
-import ChangePassword from "./components/auth/ChangePassword";
-import HouseFormCreate from "./components/house/HouseFormCreate";
-import Chat from "./components/chat/Chat";
+import StudentsList from "./components/students/StudentsList";
+import StudentsFormCreate from "./components/students/StudentsFormCreate";
+import StudentsFormEdit from "./components/students/StudentsFormEdit";
+
+import BooksList from "./components/books/BooksList";
+import BooksFormCreate from "./components/books/BooksFormCreate";
+import BooksFormEdit from "./components/books/BooksFormEdit";
+
+import LoansList from "./components/loans/LoansList";
+import LoansFormCreate from "./components/loans/LoansFormCreate";
+import LoansFormEdit from "./components/loans/LoansFormEdit";
+
 
 function App() {
 
-  const dispatch = useDispatch();
-
-  useEffect(() => {
-    const sessionData = localStorage.getItem('sessionData');
-    if(sessionData) {
-      dispatch(loginSuccess(JSON.parse(sessionData)))      
-    }
-  })
 
   return (
     <>      
       <BrowserRouter>
         <Header />
         <Routes>
-          {/* Rutas Privadas */}
-          <Route path="/" element={<PrivateRoute Component={Example} />} />
-          <Route path="/user" element={<PrivateRoute Component={UserList} />} />
-          <Route path="/user/:id" element={<PrivateRoute Component={UserFormEdit} />} />
-          <Route path="/change-password" element={<PrivateRoute Component={ChangePassword} />} />
 
-          {/* Rutas de casas */}
-          <Route path="/create-house" element={<PrivateRoute Component={HouseFormCreate} />} />
+          <Route path="/student" element={<StudentsList />} />
+          <Route path="/student/:id" element={<StudentsFormEdit />} />
+          <Route path="/create-student" element={<StudentsFormCreate />} />
 
-          {/* Rutas de chat */}
-          <Route path="/chat" element={<PrivateRoute Component={Chat} />} />
+          <Route path="/books" element={<BooksList />} />
+          <Route path="/book/:id" element={<BooksFormEdit />} />
+          <Route path="/create-book" element={<BooksFormCreate />} />
 
-          {/* Rutas Publicas */}
-          <Route path="/create-user" element={<UserFormCreate />} />
-          <Route path="/login" element={<Login />} />
+          <Route path="/loans" element={<LoansList />} />
+          <Route path="/loan/:id" element={<LoansFormEdit />} />
+          <Route path="/create-loan" element={<LoansFormCreate />} />
+
         </Routes>
         <Footer />
       </BrowserRouter>

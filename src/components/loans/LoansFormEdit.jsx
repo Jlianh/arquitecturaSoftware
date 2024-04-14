@@ -1,43 +1,34 @@
 import { useNavigate, useParams } from 'react-router-dom'
-import { useGetUserByIdQuery, useUpdateUserMutation, useUploadAvatarMutation } from '../../features/api/apiSlice';
 import Swal from 'sweetalert2'
-import UserForm from './UserForm';
+import LoansForm from './LoansForm';
 import { useState } from 'react';
+import { useGetLoanByIdQuery, useUpdateLoanMutation } from '../../features/api/loanSlice';
 
-export default function UserFormEdit(){
+export default function LoansFormEdit(){
 
     const navigate = useNavigate(); // Instanciamos la vaiable de useNavigate
     const params = useParams(); // Instanciamos la variable para obtener los parametros por URL
-    const [updateUser] = useUpdateUserMutation()
+    const [updateLoan] = useUpdateLoanMutation()
 
-    const [file, setFile] = useState(null);
-    const [uploadAvatar] = useUploadAvatarMutation();
+    const { data: students } = useGetStudentsQuery();
+    const { data: books } = useGetBooksQuery();
 
-    const handleChangeAvatar = (e) => {
-        setFile(e.target.files)
-    }
 
     const handleSubmit = async (e) => {
         e.preventDefault();        
-        const user = {
-            _id: params.id, // Seteamos en _id por el que me llega como parametro
-            name: e.target.name.value,
-            lastname: e.target.lastname.value,
-            email: e.target.email.value,
-            id: e.target.id.value
+        const loan = {
+            id: params.id, // Seteamos en _id por el que me llega como parametro
+            date: e.target.date.value,
+            student_id: e.target.student_id.value,
+            book_id: e.target.book_id.value,
         }
         try {
-            const response = await updateUser(user)
-            if(file){
-                const formData = new FormData();
-                formData.append("file", file[0])
-                uploadAvatar({_id: params.id, file: formData})
-            }
+            const response = await updateLoan(loan)
             if(response.data.status == "error"){
                 Swal.fire({
                     position: "top-end",
                     icon: "error",
-                    title: "El usuario no pudo ser actualizado, por favor verifique los datos",
+                    title: "El prestamo no pudo ser actualizado, por favor verifique los datos",
                     showConfirmButton: false,
                     timer: 1500
                   })
@@ -45,18 +36,18 @@ export default function UserFormEdit(){
                 Swal.fire({
                     position: "top-end",
                     icon: "success",
-                    title: "Usuario Actualizado Correctamente",
+                    title: "Prestamo Actualizado Correctamente",
                     showConfirmButton: false,
                     timer: 1500
                 }).then(() => {
-                    navigate('/user') // Hacemos la redireccion
+                    navigate('/loans') // Hacemos la redireccion
                 });
             }
         } catch (error) {
             Swal.fire({
                 position: "top-end",
                 icon: "error",
-                title: "El usuario no pudo ser actualizado, por favor verifique los datos",
+                title: "El prestamo no pudo ser actualizado, por favor verifique los datos",
                 showConfirmButton: false,
                 timer: 1500
               })
@@ -64,7 +55,7 @@ export default function UserFormEdit(){
     }
 
     /** Se ejecuta al cargar el componente */
-    const { data: user, isLoading, isError, error } = useGetUserByIdQuery(params.id);
+    const { data: loan, isLoading, isError, error } = useGetLoanByIdQuery(params.id);
     if (isLoading) return <div role="status" className='flex justify-center'>
         <svg aria-hidden="true" className="w-8 h-8 text-gray-200 animate-spin dark:text-gray-600 fill-blue-600" viewBox="0 0 100 101" fill="none" xmlns="http://www.w3.org/2000/svg">
             <path d="M100 50.5908C100 78.2051 77.6142 100.591 50 100.591C22.3858 100.591 0 78.2051 0 50.5908C0 22.9766 22.3858 0.59082 50 0.59082C77.6142 0.59082 100 22.9766 100 50.5908ZM9.08144 50.5908C9.08144 73.1895 27.4013 91.5094 50 91.5094C72.5987 91.5094 90.9186 73.1895 90.9186 50.5908C90.9186 27.9921 72.5987 9.67226 50 9.67226C27.4013 9.67226 9.08144 27.9921 9.08144 50.5908Z" fill="currentColor"/>
@@ -75,6 +66,6 @@ export default function UserFormEdit(){
     else if(isError) return (<div>Error: {error.message} </div>)        
         
     return (
-        <UserForm props={{handleSubmit:handleSubmit, handleChangeAvatar:handleChangeAvatar, onFileChange: null, user:user}} />
+        <LoansForm props={{handleSubmit:handleSubmit, loan:loan, students:students, books:books}} />
     );
 }
